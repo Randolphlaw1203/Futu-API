@@ -29,9 +29,13 @@ public class GetSubInfo implements FTSPI_Qot, FTSPI_Conn {
     if (errCode != 0)
       return;
 
-    QotGetSubInfo.C2S c2s = QotGetSubInfo.C2S.newBuilder().build();
-    QotGetSubInfo.Request req =
-        QotGetSubInfo.Request.newBuilder().setC2S(c2s).build();
+    QotGetSubInfo.C2S c2s = QotGetSubInfo.C2S//
+        .newBuilder()//
+        .build();
+    QotGetSubInfo.Request req = QotGetSubInfo.Request//
+        .newBuilder()//
+        .setC2S(c2s)//
+        .build();
     int seqNo = qot.getSubInfo(req);
     System.out.printf("Send QotGetSubInfo: %d\n", seqNo);
   }

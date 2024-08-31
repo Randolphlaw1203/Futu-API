@@ -32,13 +32,21 @@ public class GetBasicQot implements FTSPI_Qot, FTSPI_Conn {
         if (errCode != 0)
             return;
 
-        QotCommon.Security sec = QotCommon.Security.newBuilder()
-                .setMarket(QotCommon.QotMarket.QotMarket_HK_Security_VALUE)
-                .setCode("00700").build();
-        QotSub.C2S c2s = QotSub.C2S.newBuilder().addSecurityList(sec)
-                .addSubTypeList(QotCommon.SubType.SubType_Basic_VALUE)
-                .setIsSubOrUnSub(true).build();
-        QotSub.Request req = QotSub.Request.newBuilder().setC2S(c2s).build();
+        QotCommon.Security sec = QotCommon.Security//
+                .newBuilder()//
+                .setMarket(QotCommon.QotMarket.QotMarket_HK_Security_VALUE)//
+                .setCode("00700")//
+                .build();
+        QotSub.C2S c2s = QotSub.C2S//
+                .newBuilder()//
+                .addSecurityList(sec)//
+                .addSubTypeList(QotCommon.SubType.SubType_Basic_VALUE)//
+                .setIsSubOrUnSub(true)//
+                .build();
+        QotSub.Request req = QotSub.Request//
+                .newBuilder()//
+                .setC2S(c2s)//
+                .build();
         int seqNo = qot.sub(req);
         System.out.printf("Send QotSub: %d\n", seqNo);
     }
@@ -56,13 +64,18 @@ public class GetBasicQot implements FTSPI_Qot, FTSPI_Conn {
         if (rsp.getRetType() != Common.RetType.RetType_Succeed_VALUE)
             return;
 
-        QotCommon.Security sec = QotCommon.Security.newBuilder()
-                .setMarket(QotCommon.QotMarket.QotMarket_HK_Security_VALUE)
+        QotCommon.Security sec = QotCommon.Security//
+                .newBuilder()//
+                .setMarket(QotCommon.QotMarket.QotMarket_HK_Security_VALUE)//
                 .setCode("00700").build();
-        QotGetBasicQot.C2S c2s =
-                QotGetBasicQot.C2S.newBuilder().addSecurityList(sec).build();
-        QotGetBasicQot.Request req =
-                QotGetBasicQot.Request.newBuilder().setC2S(c2s).build();
+        QotGetBasicQot.C2S c2s = QotGetBasicQot.C2S//
+                .newBuilder()//
+                .addSecurityList(sec)//
+                .build();
+        QotGetBasicQot.Request req = QotGetBasicQot.Request//
+                .newBuilder()//
+                .setC2S(c2s)//
+                .build();
         int seqNo = qot.getBasicQot(req);
         System.out.printf("Send QotGetBasicQot: %d\n", seqNo);
     }

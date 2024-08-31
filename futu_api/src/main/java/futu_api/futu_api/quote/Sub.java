@@ -6,14 +6,14 @@ import com.futu.openapi.FTAPI_Conn_Qot;
 import com.futu.openapi.FTSPI_Conn;
 import com.futu.openapi.FTSPI_Qot;
 import com.futu.openapi.pb.QotCommon;
-import com.futu.openapi.pb.QotRequestHistoryKL;
+import com.futu.openapi.pb.QotSub;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 
-public class RequestHistoryKL implements FTSPI_Qot, FTSPI_Conn {
+public class Sub implements FTSPI_Qot, FTSPI_Conn {
     FTAPI_Conn_Qot qot = new FTAPI_Conn_Qot();
 
-    public RequestHistoryKL() {
+    public Sub() {
         qot.setClientInfo("javaclient", 1);
         qot.setConnSpi(this);
         qot.setQotSpi(this);
@@ -33,20 +33,17 @@ public class RequestHistoryKL implements FTSPI_Qot, FTSPI_Conn {
         QotCommon.Security sec = QotCommon.Security//
                 .newBuilder()//
                 .setMarket(QotCommon.QotMarket.QotMarket_HK_Security_VALUE)//
-                .setCode("03690")//
+                .setCode("00700")//
                 .build();
-        QotRequestHistoryKL.C2S c2s = QotRequestHistoryKL.C2S//
+        QotSub.C2S c2s = QotSub.C2S//
                 .newBuilder()//
-                .setRehabType(QotCommon.RehabType.RehabType_Forward_VALUE)//
-                .setKlType(QotCommon.KLType.KLType_60Min_VALUE)//
-                .setSecurity(sec)//
-                .setBeginTime("2024-08-01")//
-                .setEndTime("2024-08-02")//
+                .addSecurityList(sec)//
+                .addSubTypeList(QotCommon.SubType.SubType_Basic_VALUE)//
+                .setIsSubOrUnSub(true)//
                 .build();
-        QotRequestHistoryKL.Request req =
-                QotRequestHistoryKL.Request.newBuilder().setC2S(c2s).build();
-        int seqNo = qot.requestHistoryKL(req);
-        System.out.printf("Send QotRequestHistoryKL: %d\n", seqNo);
+        QotSub.Request req = QotSub.Request.newBuilder().setC2S(c2s).build();
+        int seqNo = qot.sub(req);
+        System.out.printf("Send QotSub: %d\n", seqNo);
     }
 
     @Override
@@ -55,15 +52,14 @@ public class RequestHistoryKL implements FTSPI_Qot, FTSPI_Conn {
     }
 
     @Override
-    public void onReply_RequestHistoryKL(FTAPI_Conn client, int nSerialNo,
-            QotRequestHistoryKL.Response rsp) {
+    public void onReply_Sub(FTAPI_Conn client, int nSerialNo,
+            QotSub.Response rsp) {
         if (rsp.getRetType() != 0) {
-            System.out.printf("QotRequestHistoryKL failed: %s\n",
-                    rsp.getRetMsg());
+            System.out.printf("QotSub failed: %s\n", rsp.getRetMsg());
         } else {
             try {
                 String json = JsonFormat.printer().print(rsp);
-                System.out.printf("Receive QotRequestHistoryKL: %s\n", json);
+                System.out.printf("Receive QotSub: %s\n", json);
             } catch (InvalidProtocolBufferException e) {
                 e.printStackTrace();
             }
@@ -72,7 +68,7 @@ public class RequestHistoryKL implements FTSPI_Qot, FTSPI_Conn {
 
     public static void main(String[] args) {
         FTAPI.init();
-        RequestHistoryKL qot = new RequestHistoryKL();
+        Sub qot = new Sub();
         qot.start();
 
         while (true) {
